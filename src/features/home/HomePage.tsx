@@ -1,27 +1,31 @@
 import { useState } from 'react'
-import type { FormEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { getContent } from '../../data/seed'
 import { useAuthStore } from '../auth/authStore'
-import { BannerCard, CourseCard, SectionRail } from '../content/VideoCard'
-import { Button } from '../../shared/ui'
-
-const GUEST_CHIPS = ['Dla Ciebie', 'Sport', 'Taniec', 'Edukacja', 'Muzyka', 'Sztuka']
-const LOGGED_CHIPS = ['Dla Ciebie', 'Sport', 'Taniec', 'Edukacja', 'Muzyka', 'Sztuka']
+import { ContinueLearningCard, SectionRail } from '../content/VideoCard'
+import { FilterSortRow, HomeChips } from './HomeChips'
 
 export function HomePage() {
   const user = useAuthStore((s) => s.user)
-  const navigate = useNavigate()
-  const [chip, setChip] = useState('Dla Ciebie')
-  const [query, setQuery] = useState('')
+  const [chip, setChip] = useState('Wszystkie')
   const content = getContent()
 
   const filtered =
-    chip === 'Dla Ciebie'
+    chip === 'Wszystkie' || chip === 'Top trendy'
       ? content
-      : content.filter((c) =>
-          c.tags.some((t) => t.toLowerCase().includes(chip.toLowerCase().slice(0, 4))),
-        )
+      : content.filter((c) => {
+          const key = chip.toLowerCase()
+          return (
+            c.tags.some((t) => t.toLowerCase().includes(key.slice(0, 4))) ||
+            c.type.includes(key.slice(0, 4)) ||
+            (key.includes('mistrz') && c.authorRole === 'master') ||
+            (key.includes('uczni') && c.authorRole === 'student') ||
+            (key.includes('kooper') && c.type === 'cooperation') ||
+            (key.includes('rekord') && c.type === 'record') ||
+            (key.includes('chall') && c.type === 'challenge') ||
+            (key.includes('freest') && c.type === 'freestyle')
+          )
+        })
 
   const top = [...filtered].sort((a, b) => b.rating - a.rating)
   const courses = filtered.filter((c) => c.type === 'course' || c.type === 'tutorial')
@@ -35,111 +39,93 @@ export function HomePage() {
     courses.find((c) => c.id === 'c7') ?? courses[2],
   ].filter(Boolean) as typeof courses
 
-  function onSearch(e: FormEvent) {
-    e.preventDefault()
-    navigate(query.trim() ? `/search?q=${encodeURIComponent(query.trim())}` : '/search')
-  }
-
   if (!user) {
     return (
       <div>
-        <section className="mx-auto mb-14 max-w-3xl pt-6 text-center md:pt-10">
-          <h1 className="mb-6 font-display text-4xl font-semibold tracking-tight md:text-6xl">
-            Znajdź swoją nową pasję
-          </h1>
-          <form
-            onSubmit={onSearch}
-            className="mx-auto flex max-w-xl overflow-hidden rounded-xl border border-navy-4 bg-navy-2"
-          >
-            <input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Czego chcesz się nauczyć?"
-              className="min-w-0 flex-1 bg-transparent px-4 py-3.5 text-sm outline-none placeholder:text-navy-muted"
-            />
-            <button
-              type="submit"
-              className="bg-soft px-5 text-sm font-semibold text-primary hover:bg-soft-2"
-            >
-              Szukaj
-            </button>
-          </form>
-        </section>
-
-        <div className="mb-8 flex flex-wrap justify-center gap-2">
-          {GUEST_CHIPS.map((label, i) => (
-            <button
-              key={label}
-              type="button"
-              onClick={() => setChip(label)}
-              className={`rounded-full px-4 py-2 text-sm ${
-                chip === label || (i === 0 && chip === 'Dla Ciebie' && label === 'Dla Ciebie')
-                  ? 'bg-soft text-primary font-semibold'
-                  : 'bg-navy-3 text-navy-soft hover:text-cream'
-              }`}
-            >
-              {label}
-            </button>
-          ))}
+        <div className="mb-10">
+          <HomeChips active={chip} onChange={setChip} />
         </div>
 
-        <SectionRail title="Top of the Top" items={top.slice(0, 6)} />
+        <section className="mb-8 text-center">
+          <h1 className="mb-4 font-display text-4xl font-semibold tracking-tight md:text-[56px] md:leading-[1.1]">
+            Znajdź swoją{' '}
+            <span className="bg-gradient-to-r from-[#A1DAF8] to-[#7EB8FF] bg-clip-text text-transparent">
+              nową pasję
+            </span>
+          </h1>
+          <p className="mx-auto max-w-2xl text-base text-cream/75 md:text-lg">
+            Odkryj najpopularniejsze umiejętności, ucz się od najlepszych i dziel swoim progresem.
+          </p>
+        </section>
+
+        <FilterSortRow className="mb-10" />
+
+        <SectionRail title="Top of the Top" items={top.slice(0, 4)} />
         <SectionRail title="Nowe kursy" items={courses} />
-        <SectionRail title="Nowe wydarzenia" items={coops.length ? coops : challenges} />
-        <SectionRail title="Top twórcy" items={masters} />
+        <SectionRail title="Nowe wykonania" items={students} />
+        <SectionRail title="Top rated" items={top.slice(0, 4)} />
         <SectionRail title="Challenge" items={challenges} />
-        <SectionRail title="Warsztaty dla Ciebie" items={courses.slice().reverse()} />
+        <SectionRail title="Kooperacje" items={coops} />
       </div>
     )
   }
 
-  const name = user.profile.displayName?.split(' ')[0] || 'Użytkowniku'
+  const name = user.profile.displayName?.split(' ')[0] || 'Jakub'
 
   return (
     <div>
-      <div className="mb-6 flex flex-wrap gap-2">
-        {LOGGED_CHIPS.map((label) => (
-          <button
-            key={label}
-            type="button"
-            onClick={() => setChip(label)}
-            className={`rounded-full px-4 py-2 text-sm ${
-              chip === label
-                ? 'bg-soft text-primary font-semibold'
-                : 'bg-navy-3 text-navy-soft hover:text-cream'
-            }`}
-          >
-            {label}
-          </button>
-        ))}
+      <div className="mb-6">
+        <HomeChips active={chip} onChange={setChip} />
       </div>
 
-      <h1 className="mb-8 font-display text-2xl font-semibold md:text-[28px]">
-        {name}, wejdź do gry o awans i zostań Championem
-      </h1>
+      <p className="mb-8 text-center font-display text-lg text-cream md:text-[22px]">
+        {name}, wyznacz cel rozwojowy i wejdź do grona Championów{' '}
+        <Link to="/onboarding" className="text-tagline hover:underline">
+          →
+        </Link>
+      </p>
 
-      <section className="mb-14">
-        <div className="mb-6 flex flex-wrap items-center gap-4">
+      <section className="mb-8">
+        <div className="mb-5 flex flex-wrap items-center gap-4">
           <h2 className="font-display text-[28px] font-semibold">Kontynuuj naukę</h2>
-          <Button variant="outline" className="!min-h-10 !rounded-md text-sm">
+          <button
+            type="button"
+            className="rounded-md border-[1.5px] border-soft/80 px-5 py-2.5 text-sm font-medium text-soft hover:bg-soft/10"
+          >
             Zobacz wszystkie
-          </Button>
+          </button>
         </div>
-        <div className="flex flex-col gap-5 xl:flex-row xl:items-stretch">
-          {continueLearning[0] ? (
-            <div className="min-w-0 flex-[1.4]">
-              <BannerCard item={continueLearning[0]} />
-            </div>
-          ) : null}
-          <div className="flex min-w-0 flex-1 flex-col gap-5 sm:flex-row">
-            {continueLearning.slice(1, 3).map((item, i) => (
-              <CourseCard key={item.id} item={item} progress={i === 0 ? 66 : 28} />
-            ))}
+
+        {continueLearning[0] ? (
+          <div className="mb-5">
+            <ContinueLearningCard
+              item={continueLearning[0]}
+              modulesDone={8}
+              modulesTotal={12}
+              minutesLeft={15}
+              ctaModule={7}
+            />
           </div>
+        ) : null}
+
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+          {continueLearning.slice(1, 3).map((item, i) => (
+            <ContinueLearningCard
+              key={item.id}
+              item={item}
+              modulesDone={i === 0 ? 8 : 3}
+              modulesTotal={12}
+              minutesLeft={i === 0 ? 15 : 40}
+              ctaModule={i === 0 ? 7 : 4}
+              compact
+            />
+          ))}
         </div>
       </section>
 
-      <SectionRail title="Top of the Top" items={top.slice(0, 6)} />
+      <FilterSortRow className="mb-10" />
+
+      <SectionRail title="Top of the Top" items={top.slice(0, 4)} />
       <SectionRail title="Twoi mistrzowie" items={masters} />
       <SectionRail title="Znajomi uczniowie" items={students} />
       <SectionRail title="Challenge" items={challenges} />
