@@ -26,7 +26,7 @@ export function AppShell() {
         className="min-h-screen text-cream"
         style={{
           background:
-            'radial-gradient(1200px 600px at 20% -10%, rgba(56,58,95,0.33), transparent), #000622',
+            'radial-gradient(1200px 600px at 20% -10%, rgba(56,58,95,0.33), transparent), #00162E',
         }}
       >
         <header className="border-b border-navy-4/70">
@@ -74,7 +74,7 @@ export function AppShell() {
       className="min-h-screen text-cream"
       style={{
         background:
-          'radial-gradient(1200px 600px at 20% -10%, rgba(56,58,95,0.33), transparent), #000622',
+          'radial-gradient(1200px 600px at 20% -10%, rgba(56,58,95,0.33), transparent), #030E21',
       }}
     >
       <header className="mx-4 mt-3 rounded-lg border border-navy-4 bg-navy md:mx-6">

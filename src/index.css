@@ -2,7 +2,10 @@
 @import 'tailwindcss';
 
 @theme {
-  --color-canvas: #000622;
+  /* Figma UI accepted — page fills */
+  --color-canvas: #000622; /* auth dark / Denim-adjacent */
+  --color-oxford: #030e21; /* Home page_loged in — Colors/Oxford/Oxford Blue */
+  --color-denim: #00162e; /* Home page_logged out — Colors/Denim/Denim900 */
   --color-navy: #13153b;
   --color-navy-2: #0f112f;
   --color-navy-3: #0b0d23;
@@ -11,18 +14,22 @@
   --color-navy-soft: #a9abcb;
   --color-primary: #300cff;
   --color-primary-hover: #5e3fff;
+  --color-facebook: #0866ff;
   --color-soft: #f6f4ff;
   --color-soft-2: #d6ceff;
   --color-link: #d6ceff;
   --color-tagline: #a1daf8;
-  --color-cream: #fafafa;
-  --color-muted: #909090;
+  --color-cream: #fafafa; /* Colors/gray/Gray100 */
+  --color-muted: #656565;
+  --color-gray-200: #d9d9d9;
+  --color-gray-300: #ebebeb;
   --color-border: #5e6083;
   --color-field: #0b0d23;
-  --color-danger: #d61f1f;
+  --color-danger: #d7282a;
   --color-danger-soft: #e67979;
-  --color-success: #3ddc97;
-  --color-rating: #ebd599;
+  --color-success: #45ac43;
+  --color-rating: #f4c300;
+  --color-secondary: #5d7fbe;
   --font-display: 'League Spartan', sans-serif;
   --font-body: 'Inter', sans-serif;
 }
