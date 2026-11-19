@@ -14,7 +14,7 @@ export function RankingsPage() {
         <button
           onClick={() => setRole('student')}
           className={`rounded-xl px-4 py-2 text-sm ${
-            role === 'student' ? 'bg-coral' : 'bg-navy-3 text-muted'
+            role === 'student' ? 'bg-soft text-primary' : 'bg-navy-3 text-navy-soft'
           }`}
         >
           Uczniowie
@@ -22,7 +22,7 @@ export function RankingsPage() {
         <button
           onClick={() => setRole('master')}
           className={`rounded-xl px-4 py-2 text-sm ${
-            role === 'master' ? 'bg-coral' : 'bg-navy-3 text-muted'
+            role === 'master' ? 'bg-soft text-primary' : 'bg-navy-3 text-navy-soft'
           }`}
         >
           Mistrzowie

@@ -11,7 +11,7 @@ export function ContentPage() {
     return (
       <div>
         <h1 className="font-display text-2xl">Nie znaleziono treści</h1>
-        <Link to="/" className="mt-4 inline-block text-coral">
+        <Link to="/" className="mt-4 inline-block text-link">
           Wróć
         </Link>
       </div>
@@ -47,7 +47,7 @@ export function ContentPage() {
             <span>
               Autor:{' '}
               {author ? (
-                <Link to={`/profile/${author.id}`} className="text-coral hover:underline">
+                <Link to={`/profile/${author.id}`} className="text-link hover:underline">
                   {item.authorName}
                 </Link>
               ) : (

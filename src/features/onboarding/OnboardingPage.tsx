@@ -71,7 +71,7 @@ export function OnboardingPage() {
                 type="button"
                 onClick={() => toggleSport(sport)}
                 className={`rounded-full px-4 py-2 text-sm transition ${
-                  active ? 'bg-coral text-white' : 'bg-navy-3 text-muted hover:text-white'
+                  active ? 'bg-soft text-primary' : 'bg-navy-3 text-navy-soft hover:text-cream'
                 }`}
               >
                 {sport}
@@ -97,7 +97,7 @@ export function OnboardingPage() {
               value={bio}
               onChange={(e) => setBio(e.target.value)}
               rows={4}
-              className="w-full rounded-xl border border-transparent bg-field px-4 py-3 text-navy outline-none focus:ring-2 focus:ring-coral/50"
+              className="w-full rounded-xl border border-border bg-field px-4 py-3 text-cream outline-none focus:border-primary"
               placeholder="Krótki opis profilu"
             />
           </label>
@@ -133,14 +133,14 @@ export function OnboardingPage() {
   const isLast = step === steps.length - 1
 
   return (
-    <div className="relative min-h-screen bg-navy">
+    <div className="relative min-h-screen bg-canvas">
       <div className="mx-auto flex min-h-screen max-w-xl flex-col px-6 py-10">
         <Logo className="mb-8 text-center" />
         <div className="mb-8 flex gap-2">
           {steps.map((_, i) => (
             <div
               key={i}
-              className={`h-1.5 flex-1 rounded-full ${i <= step ? 'bg-coral' : 'bg-border'}`}
+              className={`h-1.5 flex-1 rounded-full ${i <= step ? 'bg-primary' : 'bg-border'}`}
             />
           ))}
         </div>

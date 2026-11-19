@@ -2,29 +2,34 @@ import type { ButtonHTMLAttributes, InputHTMLAttributes, ReactNode } from 'react
 
 export function Logo({ className = '' }: { className?: string }) {
   return (
-    <div className={`font-display text-3xl font-bold tracking-wide ${className}`}>
-      praxeon
+    <div
+      className={`font-display text-[28px] font-bold tracking-[0.18em] text-cream ${className}`}
+    >
+      PRAXEON
     </div>
   )
 }
 
 export function Button({
-  variant = 'primary',
+  variant = 'soft',
   className = '',
   children,
   ...props
 }: ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: 'primary' | 'ghost' | 'outline' | 'dark'
+  variant?: 'soft' | 'primary' | 'outline' | 'ghost' | 'link'
 }) {
   const styles = {
-    primary: 'bg-coral hover:bg-coral-hover text-white border-transparent',
-    ghost: 'bg-transparent hover:bg-white/10 text-white border-transparent',
-    outline: 'bg-transparent hover:bg-white/5 text-white border-border',
-    dark: 'bg-navy-3 hover:bg-navy-2 text-white border-border',
+    soft: 'bg-soft text-primary hover:bg-soft-2 border-transparent min-h-[52px] px-6 rounded-lg font-semibold',
+    primary:
+      'bg-primary text-cream hover:bg-primary-hover border-transparent min-h-[44px] px-5 rounded-lg font-semibold',
+    outline:
+      'bg-transparent text-soft border-soft/80 hover:bg-soft/10 min-h-[48px] px-5 rounded-xl border',
+    ghost: 'bg-transparent hover:bg-white/5 text-cream border-transparent',
+    link: 'bg-transparent text-link hover:underline border-transparent px-1 py-0 min-h-0 font-medium',
   }[variant]
   return (
     <button
-      className={`inline-flex items-center justify-center gap-2 rounded-xl border px-5 py-3 font-medium transition disabled:opacity-50 ${styles} ${className}`}
+      className={`inline-flex items-center justify-center gap-2 transition disabled:opacity-45 ${styles} ${className}`}
       {...props}
     >
       {children}
@@ -40,14 +45,14 @@ export function Field({
 }: InputHTMLAttributes<HTMLInputElement> & { label?: string; error?: string }) {
   return (
     <label className={`block w-full ${className}`}>
-      {label ? <span className="mb-1.5 block text-sm text-muted">{label}</span> : null}
+      {label ? <span className="mb-1.5 block text-sm text-navy-soft">{label}</span> : null}
       <input
-        className={`w-full rounded-xl border bg-field px-4 py-3 text-navy outline-none transition placeholder:text-slate-400 focus:ring-2 focus:ring-coral/50 ${
-          error ? 'border-danger' : 'border-transparent'
+        className={`w-full rounded-xl border bg-field px-4 py-3.5 text-cream outline-none transition placeholder:text-navy-muted focus:border-primary ${
+          error ? 'border-danger-soft' : 'border-border'
         }`}
         {...props}
       />
-      {error ? <span className="mt-1 block text-sm text-danger">{error}</span> : null}
+      {error ? <span className="mt-1 block text-sm text-danger-soft">{error}</span> : null}
     </label>
   )
 }
@@ -65,12 +70,12 @@ export function Modal({
 }) {
   if (!open) return null
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-      <div className="w-full max-w-lg rounded-2xl bg-navy-2 p-8 shadow-2xl border border-border">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
+      <div className="w-full max-w-lg rounded-2xl border border-navy-4 bg-navy-2 p-8 shadow-2xl">
         <div className="mb-4 flex items-start justify-between gap-4">
           <h2 className="font-display text-2xl font-semibold">{title}</h2>
           {onClose ? (
-            <button onClick={onClose} className="text-muted hover:text-white text-xl leading-none">
+            <button onClick={onClose} className="text-muted hover:text-cream text-xl leading-none">
               ×
             </button>
           ) : null}
@@ -90,7 +95,12 @@ export function Avatar({
   color: string
   size?: 'sm' | 'md' | 'lg' | 'xl'
 }) {
-  const sizes = { sm: 'h-8 w-8 text-xs', md: 'h-10 w-10 text-sm', lg: 'h-16 w-16 text-xl', xl: 'h-24 w-24 text-3xl' }
+  const sizes = {
+    sm: 'h-8 w-8 text-xs',
+    md: 'h-10 w-10 text-sm',
+    lg: 'h-16 w-16 text-xl',
+    xl: 'h-24 w-24 text-3xl',
+  }
   const initials = name
     .split(' ')
     .map((p) => p[0])
@@ -107,15 +117,6 @@ export function Avatar({
   )
 }
 
-export function SectionHeader({ title, action }: { title: string; action?: ReactNode }) {
-  return (
-    <div className="mb-4 flex items-center justify-between gap-4 px-1">
-      <h2 className="font-display text-2xl font-semibold">{title}</h2>
-      {action}
-    </div>
-  )
-}
-
 export function Badge({ children }: { children: ReactNode }) {
   return (
     <span className="rounded-full bg-white/10 px-2.5 py-0.5 text-xs text-cream">{children}</span>
@@ -125,7 +126,7 @@ export function Badge({ children }: { children: ReactNode }) {
 export function Toast({ message }: { message: string | null }) {
   if (!message) return null
   return (
-    <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-xl bg-navy-3 px-4 py-3 text-sm shadow-lg border border-border">
+    <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-xl border border-navy-4 bg-navy px-4 py-3 text-sm shadow-lg">
       {message}
     </div>
   )

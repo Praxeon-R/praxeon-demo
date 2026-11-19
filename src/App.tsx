@@ -26,7 +26,7 @@ export default function App() {
 
   if (!ready) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-navy text-muted">
+      <div className="flex min-h-screen items-center justify-center bg-canvas text-navy-soft">
         Ładowanie demo…
       </div>
     )

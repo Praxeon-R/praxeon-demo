@@ -2,17 +2,27 @@
 @import 'tailwindcss';
 
 @theme {
-  --color-navy: #06101f;
-  --color-navy-2: #0a1628;
-  --color-navy-3: #12233d;
-  --color-coral: #e07a5f;
-  --color-coral-hover: #d46a4e;
-  --color-cream: #f4ece3;
-  --color-muted: #8b9bb4;
-  --color-border: #2a3a55;
-  --color-field: #ffffff;
-  --color-danger: #e05a5a;
-  --color-success: #4caf7a;
+  --color-canvas: #000622;
+  --color-navy: #13153b;
+  --color-navy-2: #0f112f;
+  --color-navy-3: #0b0d23;
+  --color-navy-4: #383a5f;
+  --color-navy-muted: #5e6083;
+  --color-navy-soft: #a9abcb;
+  --color-primary: #300cff;
+  --color-primary-hover: #5e3fff;
+  --color-soft: #f6f4ff;
+  --color-soft-2: #d6ceff;
+  --color-link: #d6ceff;
+  --color-tagline: #a1daf8;
+  --color-cream: #fafafa;
+  --color-muted: #909090;
+  --color-border: #5e6083;
+  --color-field: #0b0d23;
+  --color-danger: #d61f1f;
+  --color-danger-soft: #e67979;
+  --color-success: #3ddc97;
+  --color-rating: #ebd599;
   --font-display: 'League Spartan', sans-serif;
   --font-body: 'Inter', sans-serif;
 }
@@ -30,8 +40,8 @@ body,
 body {
   margin: 0;
   font-family: var(--font-body);
-  background: var(--color-navy);
-  color: white;
+  background: var(--color-canvas);
+  color: var(--color-cream);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -52,6 +62,6 @@ a {
   height: 8px;
 }
 ::-webkit-scrollbar-thumb {
-  background: #2a3a55;
+  background: #383a5f;
   border-radius: 999px;
 }

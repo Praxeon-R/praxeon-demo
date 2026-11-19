@@ -28,7 +28,7 @@ export function ProfilePage() {
     return (
       <div>
         <h1 className="font-display text-2xl">Nie znaleziono profilu</h1>
-        <Link to="/" className="mt-4 inline-block text-coral">
+        <Link to="/" className="mt-4 inline-block text-link">
           Wróć na start
         </Link>
       </div>

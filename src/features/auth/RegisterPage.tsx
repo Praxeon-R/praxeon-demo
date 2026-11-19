@@ -1,10 +1,11 @@
 import { useMemo, useState } from 'react'
 import type { FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import type { Role } from '../../shared/types'
 import { useAuthStore } from './authStore'
 import { AuthLayout, SocialButtons } from './AuthLayout'
 import { Button, Field, Modal, Toast } from '../../shared/ui'
+
+type AgeChoice = 'adult' | 'child' | null
 
 function passwordChecks(password: string) {
   return {
@@ -20,9 +21,9 @@ export function RegisterPage() {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [role, setRole] = useState<Role | null>(null)
+  const [age, setAge] = useState<AgeChoice>(null)
   const [error, setError] = useState('')
-  const [roleError, setRoleError] = useState(false)
+  const [ageError, setAgeError] = useState(false)
   const [toast, setToast] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [pendingUserId, setPendingUserId] = useState<string | null>(null)
@@ -34,10 +35,10 @@ export function RegisterPage() {
   async function onSubmit(e: FormEvent) {
     e.preventDefault()
     setError('')
-    setRoleError(false)
+    setAgeError(false)
 
-    if (!role) {
-      setRoleError(true)
+    if (!age) {
+      setAgeError(true)
       return
     }
     if (!checks.length || !checks.complexity) {
@@ -46,7 +47,11 @@ export function RegisterPage() {
     }
 
     setLoading(true)
-    const result = await register({ email, password, role })
+    const result = await register({
+      email,
+      password,
+      role: 'student',
+    })
     setLoading(false)
 
     if (!result.ok) {
@@ -67,10 +72,10 @@ export function RegisterPage() {
 
   return (
     <AuthLayout title="Rejestracja">
-      <form onSubmit={onSubmit} className="space-y-4">
+      <form onSubmit={onSubmit} className="space-y-5">
         <Field
           type="email"
-          placeholder="E-mail"
+          placeholder="E-mail lub numer telefonu"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -85,80 +90,91 @@ export function RegisterPage() {
 
         {showHints ? (
           <ul className="space-y-1 text-sm">
-            <li className={checks.complexity ? 'text-success' : 'text-muted'}>
+            <li className={checks.complexity ? 'text-success' : 'text-navy-soft'}>
               {checks.complexity ? '✓' : '○'} Hasło powinno zawierać cyfry, litery duże i małe
             </li>
-            <li className={checks.length ? 'text-success' : 'text-muted'}>
+            <li className={checks.length ? 'text-success' : 'text-navy-soft'}>
               {checks.length ? '✓' : '○'} Co najmniej 12 znaków
             </li>
           </ul>
         ) : null}
 
-        <div className="flex gap-6 text-sm">
+        <div className="flex flex-wrap justify-between gap-3 text-sm">
           {(
             [
-              ['student', 'Uczeń'],
-              ['master', 'Mistrz'],
+              ['adult', 'Mam ukończone 13 lat'],
+              ['child', 'Zakładam konto dla dziecka'],
             ] as const
           ).map(([value, label]) => (
             <label key={value} className="flex cursor-pointer items-center gap-2">
+              <span
+                className={`flex h-5 w-5 items-center justify-center rounded-full border ${
+                  age === value ? 'border-soft' : 'border-border'
+                }`}
+              >
+                {age === value ? <span className="h-2.5 w-2.5 rounded-full bg-soft" /> : null}
+              </span>
               <input
                 type="radio"
-                name="role"
-                checked={role === value}
+                name="age"
+                className="sr-only"
+                checked={age === value}
                 onChange={() => {
-                  setRole(value)
-                  setRoleError(false)
+                  setAge(value)
+                  setAgeError(false)
                 }}
-                className="accent-coral"
               />
               {label}
             </label>
           ))}
         </div>
-        {roleError ? (
-          <p className="text-sm text-danger">Wybierz rolę: Uczeń lub Mistrz.</p>
+        {ageError ? (
+          <p className="text-sm text-danger-soft">Wybierz jedną z opcji powyżej.</p>
         ) : null}
 
         {error ? (
-          <div className="rounded-xl border border-danger/40 bg-danger/10 px-3 py-2 text-sm text-danger">
+          <div className="rounded-xl border border-danger/40 bg-danger/10 px-3 py-2 text-sm text-danger-soft">
             {error}
           </div>
         ) : null}
 
-        <Button type="submit" className="w-full" disabled={loading}>
+        <Button type="submit" variant="soft" className="w-full" disabled={loading}>
           {loading ? 'Rejestracja…' : 'Zarejestruj się'}
         </Button>
       </form>
 
-      <p className="mt-3 text-center text-xs text-muted">
-        Rejestrując się, wyrażasz zgodę na nasze{' '}
-        <span className="text-cream">Warunki</span> oraz{' '}
-        <span className="text-cream">Politykę prywatności</span>.
-      </p>
-
-      <p className="mt-4 text-center text-sm text-muted">
-        Masz już konto?{' '}
-        <Link to="/login" className="text-coral hover:underline">
-          Zaloguj się
-        </Link>
-      </p>
-
-      <div className="mt-6">
-        <SocialButtons
-          onToast={(msg) => {
-            setToast(msg)
-            setTimeout(() => setToast(null), 2500)
-          }}
-        />
+      <div className="mt-4 space-y-2 text-center text-sm text-navy-soft">
+        <p>
+          Rejestrując się, wyrażasz zgodę na nasze{' '}
+          <button type="button" className="text-link">
+            Warunki korzystania
+          </button>{' '}
+          oraz{' '}
+          <button type="button" className="text-link">
+            Politykę prywatności
+          </button>
+        </p>
+        <p>
+          Masz już konto?{' '}
+          <Link to="/login" className="text-link hover:underline">
+            Zaloguj się
+          </Link>
+        </p>
       </div>
 
+      <SocialButtons
+        onToast={(msg) => {
+          setToast(msg)
+          setTimeout(() => setToast(null), 2500)
+        }}
+      />
+
       <Modal open={showVerify} title="Zweryfikuj swój adres e-mail!">
-        <p className="mb-6 text-sm text-muted">
+        <p className="mb-6 text-sm text-navy-soft">
           Wysłaliśmy link aktywacyjny na adres: <strong className="text-cream">{email}</strong>.
           W demo kliknij poniżej, aby aktywować konto lokalnie.
         </p>
-        <Button className="w-full" onClick={confirmEmail}>
+        <Button className="w-full" variant="soft" onClick={confirmEmail}>
           Aktywuj konto
         </Button>
       </Modal>

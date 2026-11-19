@@ -15,7 +15,7 @@ export function VideoCard({ item, large }: { item: ContentItem; large?: boolean 
   return (
     <Link
       to={`/content/${item.id}`}
-      className={`group block shrink-0 overflow-hidden rounded-2xl border border-border/50 bg-navy-2 transition hover:border-coral/40 ${
+      className={`group block shrink-0 overflow-hidden rounded-2xl border border-navy-4/70 bg-navy-2 transition hover:border-primary/40 ${
         large ? 'w-[280px]' : 'w-[220px]'
       }`}
     >
@@ -32,10 +32,27 @@ export function VideoCard({ item, large }: { item: ContentItem; large?: boolean 
       <div className="space-y-2 p-3">
         <div className="flex items-center gap-2">
           <Badge>{typeLabel[item.type]}</Badge>
-          <span className="text-xs text-muted">★ {item.rating.toFixed(1)}</span>
+          <span className="text-xs text-rating">★ {item.rating.toFixed(1)}</span>
         </div>
         <h3 className="line-clamp-2 font-medium leading-snug">{item.title}</h3>
-        <p className="text-xs text-muted">{item.authorName}</p>
+        <p className="text-xs text-navy-soft">{item.authorName}</p>
+      </div>
+    </Link>
+  )
+}
+
+export function BannerCard({ item }: { item: ContentItem }) {
+  return (
+    <Link
+      to={`/content/${item.id}`}
+      className="relative block h-[280px] w-[420px] shrink-0 overflow-hidden rounded-2xl border border-navy-4"
+    >
+      <img src={item.thumbnail} alt="" className="h-full w-full object-cover" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 p-5">
+        <Badge>{typeLabel[item.type]}</Badge>
+        <h3 className="mt-2 font-display text-2xl font-semibold">{item.title}</h3>
+        <p className="text-sm text-navy-soft">{item.authorName}</p>
       </div>
     </Link>
   )
@@ -48,11 +65,12 @@ export function HorizontalRail({
   title: string
   items: ContentItem[]
 }) {
+  if (!items.length) return null
   return (
     <section className="mb-10">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="font-display text-2xl font-semibold">{title}</h2>
-        <span className="text-sm text-muted">{items.length} pozycji</span>
+        <span className="text-sm text-navy-soft">{items.length} pozycji</span>
       </div>
       <div className="flex gap-4 overflow-x-auto pb-2">
         {items.map((item) => (

@@ -34,10 +34,10 @@ export function LoginPage() {
 
   return (
     <AuthLayout title="Logowanie">
-      <form onSubmit={onSubmit} className="space-y-4">
+      <form onSubmit={onSubmit} className="space-y-5">
         <Field
           type="email"
-          placeholder="E-mail"
+          placeholder="E-mail lub nick"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -50,38 +50,46 @@ export function LoginPage() {
           required
         />
         {error ? (
-          <div className="rounded-xl border border-danger/40 bg-danger/10 px-3 py-2 text-sm text-danger">
+          <div className="rounded-xl border border-danger/40 bg-danger/10 px-3 py-2 text-sm text-danger-soft">
             {error}
           </div>
         ) : null}
-        <Button type="submit" className="w-full" disabled={loading}>
+        <Button type="submit" variant="soft" className="w-full" disabled={loading}>
           {loading ? 'Logowanie…' : 'Zaloguj się'}
         </Button>
       </form>
 
-      <p className="mt-4 text-center text-sm text-muted">
-        Nie masz konta?{' '}
-        <Link to="/register" className="text-coral hover:underline">
-          Zarejestruj się
-        </Link>
-      </p>
-
-      <div className="mt-6 rounded-xl border border-border/60 bg-navy-3/50 p-3 text-xs text-muted">
-        Demo: <code className="text-cream">uczen@demo.pl</code> /{' '}
-        <code className="text-cream">{DEMO_PASSWORDS.student}</code>
-        <br />
-        lub <code className="text-cream">mistrz@demo.pl</code> /{' '}
-        <code className="text-cream">{DEMO_PASSWORDS.master}</code>
-      </div>
-
-      <div className="mt-6">
-        <SocialButtons
-          onToast={(msg) => {
-            setToast(msg)
+      <div className="mt-4 space-y-2 text-center text-sm">
+        <button
+          type="button"
+          className="text-navy-soft hover:text-cream"
+          onClick={() => {
+            setToast('Reset hasła niedostępny w demo')
             setTimeout(() => setToast(null), 2500)
           }}
-        />
+        >
+          Nie pamiętam hasła.
+        </button>
+        <p className="text-navy-soft">
+          Nie masz konta?{' '}
+          <Link to="/register" className="text-link hover:underline">
+            Zarejestruj się
+          </Link>
+        </p>
       </div>
+
+      <p className="mt-5 text-center text-[11px] leading-relaxed text-muted">
+        Demo: uczen@demo.pl / {DEMO_PASSWORDS.student}
+        <br />
+        mistrz@demo.pl / {DEMO_PASSWORDS.master}
+      </p>
+
+      <SocialButtons
+        onToast={(msg) => {
+          setToast(msg)
+          setTimeout(() => setToast(null), 2500)
+        }}
+      />
       <Toast message={toast} />
     </AuthLayout>
   )

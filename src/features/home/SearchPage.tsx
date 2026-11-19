@@ -38,7 +38,7 @@ export function SearchPage() {
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Szukaj treści, autorów, tagów…"
-        className="mb-4 w-full max-w-xl rounded-xl border border-border bg-navy-2 px-4 py-3 outline-none focus:ring-2 focus:ring-coral/40"
+        className="mb-4 w-full max-w-xl rounded-xl border border-border bg-navy-2 px-4 py-3 outline-none focus:border-primary focus:ring-2 focus:ring-primary/40"
       />
       <div className="mb-8 flex flex-wrap gap-2">
         {FILTERS.map((f) => (
@@ -46,7 +46,7 @@ export function SearchPage() {
             key={f.id}
             onClick={() => setFilter(f.id)}
             className={`rounded-full px-4 py-1.5 text-sm ${
-              filter === f.id ? 'bg-coral text-white' : 'bg-navy-3 text-muted hover:text-white'
+              filter === f.id ? 'bg-soft text-primary' : 'bg-navy-3 text-navy-soft hover:text-cream'
             }`}
           >
             {f.label}
