@@ -4,17 +4,22 @@ import { loadJson, saveJson } from '../shared/storage'
 
 const COLORS = ['#e07a5f', '#4a90d9', '#7cb342', '#ab47bc', '#26a69a', '#ef5350', '#ffa726']
 
-function thumb(seed: string, color: string) {
-  const svg = encodeURIComponent(
-    `<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360">
-      <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-        <stop stop-color="${color}"/><stop offset="1" stop-color="#06101f"/>
-      </linearGradient></defs>
-      <rect width="640" height="360" fill="url(#g)"/>
-      <text x="32" y="310" fill="white" font-family="Arial" font-size="28" font-weight="700">${seed}</text>
-    </svg>`,
-  )
-  return `data:image/svg+xml,${svg}`
+/** Portrait-ish Unsplash crops for Figma-like 9:16 cards */
+function photo(id: string, w = 700, h = 1200) {
+  return `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&h=${h}&q=80`
+}
+
+const PHOTOS = {
+  basketball: photo('photo-1546519638-68e109498ffc'),
+  fitness: photo('photo-1517836357463-d25dfeac3438'),
+  challenge: photo('photo-1574629810360-7efbbe195018'),
+  freestyle: photo('photo-1517649763962-0c623066013b'),
+  dance: photo('photo-1508700115892-45ecd05ae2ad'),
+  dance2: photo('photo-1547153760-18fc86324498'),
+  defense: photo('photo-1608245449230-4ac19066d2d0'),
+  plank: photo('photo-1571019614242-c5c5dee9f50b'),
+  skate: photo('photo-1547447134-cd3f5c416163', 1080, 600),
+  climb: photo('photo-1522163182402-834f871fd851'),
 }
 
 export const DEMO_PASSWORDS = {
@@ -74,7 +79,7 @@ export const SEED_CONTENT: ContentItem[] = [
     rating: 4.8,
     views: 1240,
     duration: '12:40',
-    thumbnail: thumb('Kurs · Rzut', COLORS[1]),
+    thumbnail: PHOTOS.basketball,
     description: 'Technika rzutu za 3 punkty krok po kroku.',
     tags: ['Basketball', 'Podstawy'],
   },
@@ -88,7 +93,7 @@ export const SEED_CONTENT: ContentItem[] = [
     rating: 4.6,
     views: 890,
     duration: '08:15',
-    thumbnail: thumb('Tutorial', COLORS[0]),
+    thumbnail: PHOTOS.fitness,
     description: 'Jak poprawnie wykonywać mountain climbers.',
     tags: ['Fitness'],
   },
@@ -102,7 +107,7 @@ export const SEED_CONTENT: ContentItem[] = [
     rating: 4.9,
     views: 2100,
     duration: '05:00',
-    thumbnail: thumb('Challenge', COLORS[5]),
+    thumbnail: PHOTOS.challenge,
     description: 'Rzuć wyzwanie — 50 celnych rzutów w 5 minut.',
     tags: ['Basketball', 'Challenge'],
   },
@@ -116,7 +121,7 @@ export const SEED_CONTENT: ContentItem[] = [
     rating: 4.2,
     views: 430,
     duration: '01:20',
-    thumbnail: thumb('Rekord', COLORS[3]),
+    thumbnail: PHOTOS.freestyle,
     description: 'Próba pobicia rekordu freestyle.',
     tags: ['Freestyle'],
   },
@@ -130,7 +135,7 @@ export const SEED_CONTENT: ContentItem[] = [
     rating: 4.7,
     views: 670,
     duration: '15:30',
-    thumbnail: thumb('Kooperacja', COLORS[4]),
+    thumbnail: PHOTOS.dance,
     description: 'Ćwiczenie partnerskie dla dwóch osób.',
     tags: ['Kooperacja', 'Dance'],
   },
@@ -144,7 +149,7 @@ export const SEED_CONTENT: ContentItem[] = [
     rating: 4.4,
     views: 520,
     duration: '03:45',
-    thumbnail: thumb('Freestyle', COLORS[2]),
+    thumbnail: PHOTOS.dance2,
     description: 'Improwizacja taneczna na beat.',
     tags: ['Dance', 'Freestyle'],
   },
@@ -158,7 +163,7 @@ export const SEED_CONTENT: ContentItem[] = [
     rating: 4.5,
     views: 980,
     duration: '18:00',
-    thumbnail: thumb('Kurs · Obrona', COLORS[1]),
+    thumbnail: PHOTOS.defense,
     description: 'Fundamenty obrony indywidualnej.',
     tags: ['Basketball'],
   },
@@ -172,9 +177,37 @@ export const SEED_CONTENT: ContentItem[] = [
     rating: 4.1,
     views: 310,
     duration: '03:10',
-    thumbnail: thumb('Challenge', COLORS[6]),
+    thumbnail: PHOTOS.plank,
     description: 'Wyzwanie wytrzymałościowe.',
     tags: ['Fitness', 'Challenge'],
+  },
+  {
+    id: 'c9',
+    title: 'Deskorolka — Ollie od podstaw',
+    type: 'course',
+    authorId: 'user_demo_master',
+    authorName: 'Minerva Mistrz',
+    authorRole: 'master',
+    rating: 4.7,
+    views: 1560,
+    duration: '14:20',
+    thumbnail: PHOTOS.skate,
+    description: 'Pierwszy trick — ollie krok po kroku.',
+    tags: ['Sport', 'Beginner'],
+  },
+  {
+    id: 'c10',
+    title: 'Wspinaczka: technika stóp',
+    type: 'tutorial',
+    authorId: 'user_demo_master',
+    authorName: 'Minerva Mistrz',
+    authorRole: 'master',
+    rating: 4.6,
+    views: 740,
+    duration: '09:50',
+    thumbnail: PHOTOS.climb,
+    description: 'Precyzja stóp na ściance.',
+    tags: ['Climbing'],
   },
 ]
 
@@ -189,14 +222,19 @@ export const SEED_RANKINGS: RankingEntry[] = [
   { id: 'r8', name: 'Jan Coach', role: 'master', score: 8010, sport: 'Fitness', avatarColor: COLORS[0] },
 ]
 
-export async function ensureSeed(): Promise<void> {
-  const seeded = loadJson<boolean>('seeded', false)
-  if (seeded) return
+const SEED_VERSION = 3
 
-  const users = await buildDemoUsers()
-  saveJson('users', users)
+export async function ensureSeed(): Promise<void> {
+  const version = loadJson<number>('seed_version', 0)
+  if (version >= SEED_VERSION) return
+
+  const existingUsers = loadJson<User[]>('users', [])
+  if (!existingUsers.length) {
+    saveJson('users', await buildDemoUsers())
+  }
   saveJson('content', SEED_CONTENT)
   saveJson('rankings', SEED_RANKINGS)
+  saveJson('seed_version', SEED_VERSION)
   saveJson('seeded', true)
 }
 

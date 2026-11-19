@@ -158,7 +158,7 @@ export function ProfilePage() {
           {own ? ' Upload mediów jest wyłączony w demo.' : null}
         </div>
       ) : (
-        <div className="flex flex-wrap gap-6">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
           {items.map((item) => (
             <VideoCard key={item.id} item={item} />
           ))}

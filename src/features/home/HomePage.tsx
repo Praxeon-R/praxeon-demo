@@ -3,7 +3,7 @@ import type { FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getContent } from '../../data/seed'
 import { useAuthStore } from '../auth/authStore'
-import { BannerCard, SectionRail, VideoCard } from '../content/VideoCard'
+import { BannerCard, CourseCard, SectionRail } from '../content/VideoCard'
 import { Button } from '../../shared/ui'
 
 const GUEST_CHIPS = ['Dla Ciebie', 'Sport', 'Taniec', 'Edukacja', 'Muzyka', 'Sztuka']
@@ -29,7 +29,11 @@ export function HomePage() {
   const masters = filtered.filter((c) => c.authorRole === 'master')
   const students = filtered.filter((c) => c.authorRole === 'student')
   const coops = filtered.filter((c) => c.type === 'cooperation')
-  const continueLearning = courses.slice(0, 3)
+  const continueLearning = [
+    courses.find((c) => c.id === 'c9') ?? courses[0],
+    courses.find((c) => c.id === 'c1') ?? courses[1],
+    courses.find((c) => c.id === 'c7') ?? courses[2],
+  ].filter(Boolean) as typeof courses
 
   function onSearch(e: FormEvent) {
     e.preventDefault()
@@ -114,20 +118,24 @@ export function HomePage() {
         {name}, wejdź do gry o awans i zostań Championem
       </h1>
 
-      <section className="mb-12">
+      <section className="mb-14">
         <div className="mb-6 flex flex-wrap items-center gap-4">
           <h2 className="font-display text-[28px] font-semibold">Kontynuuj naukę</h2>
-          <Button variant="outline" className="!min-h-10 text-sm">
+          <Button variant="outline" className="!min-h-10 !rounded-md text-sm">
             Zobacz wszystkie
           </Button>
         </div>
-        <div className="flex flex-wrap gap-6">
+        <div className="flex flex-col gap-5 xl:flex-row xl:items-stretch">
           {continueLearning[0] ? (
-            <BannerCard item={continueLearning[0]} />
+            <div className="min-w-0 flex-[1.4]">
+              <BannerCard item={continueLearning[0]} />
+            </div>
           ) : null}
-          {continueLearning.slice(1).map((item) => (
-            <VideoCard key={item.id} item={item} />
-          ))}
+          <div className="flex min-w-0 flex-1 flex-col gap-5 sm:flex-row">
+            {continueLearning.slice(1, 3).map((item, i) => (
+              <CourseCard key={item.id} item={item} progress={i === 0 ? 66 : 28} />
+            ))}
+          </div>
         </div>
       </section>
 

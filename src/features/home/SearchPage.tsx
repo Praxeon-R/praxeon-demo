@@ -58,7 +58,7 @@ export function SearchPage() {
       {results.length === 0 ? (
         <p className="text-muted">Brak wyników dla podanego zapytania.</p>
       ) : (
-        <div className="flex flex-wrap gap-4">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
           {results.map((item) => (
             <VideoCard key={item.id} item={item} />
           ))}
