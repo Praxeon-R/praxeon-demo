@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { getContent } from '../../data/seed'
 import { VideoCard } from '../content/VideoCard'
 import type { ContentType } from '../../shared/types'
@@ -14,7 +15,8 @@ const FILTERS: Array<{ id: 'all' | ContentType; label: string }> = [
 ]
 
 export function SearchPage() {
-  const [query, setQuery] = useState('')
+  const [params] = useSearchParams()
+  const [query, setQuery] = useState(params.get('q') ?? '')
   const [filter, setFilter] = useState<(typeof FILTERS)[number]['id']>('all')
   const content = getContent()
 
