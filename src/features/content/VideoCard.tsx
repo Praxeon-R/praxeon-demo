@@ -177,66 +177,90 @@ export function VideoCard({
   )
 }
 
-/** Progress course card used next to banner in „Kontynuuj naukę” */
-export function CourseCard({
+/** Horizontal continue-learning card from Figma (thumb | body | stats) */
+export function ContinueLearningCard({
   item,
-  progress = 66,
+  modulesDone = 8,
+  modulesTotal = 12,
+  minutesLeft = 15,
+  ctaModule = 7,
+  compact = false,
 }: {
   item: ContentItem
-  progress?: number
+  modulesDone?: number
+  modulesTotal?: number
+  minutesLeft?: number
+  ctaModule?: number
+  compact?: boolean
 }) {
-  const modulesTotal = 12
-  const modulesDone = Math.round((progress / 100) * modulesTotal)
+  const progress = Math.round((modulesDone / modulesTotal) * 100)
 
   return (
     <Link
       to={`/content/${item.id}`}
-      className="group flex w-full max-w-[532px] flex-1 flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#0B1630] shadow-[0_8px_24px_rgba(0,0,0,0.28)]"
+      className={`group flex overflow-hidden rounded-2xl border border-white/10 bg-[#0B1630] ${
+        compact ? 'min-h-[160px]' : 'min-h-[200px]'
+      }`}
     >
-      <div className="relative h-[220px] overflow-hidden bg-navy-4">
+      <div
+        className={`relative shrink-0 self-stretch overflow-hidden bg-navy-4 ${
+          compact ? 'w-[140px]' : 'w-[200px] md:w-[240px]'
+        }`}
+      >
         <img
           src={item.thumbnail}
           alt=""
           className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0B1630] via-transparent to-transparent" />
       </div>
-      <div className="flex flex-1 flex-col gap-3 p-5">
-        <div className="flex flex-wrap gap-2">
-          {item.tags.slice(0, 2).map((t) => (
-            <Tag key={t} label={t} />
-          ))}
-        </div>
-        <h3 className="font-display text-[20px] font-semibold leading-snug text-cream">
-          {item.title}
-        </h3>
-        <div className="mt-1">
-          <div className="mb-1.5 flex justify-between text-xs text-navy-soft">
-            <span>
-              {modulesDone}/{modulesTotal} modułów
-            </span>
-            <span>{progress}%</span>
+      <div className="flex min-w-0 flex-1 flex-col justify-between gap-3 p-4 md:p-5">
+        <div>
+          <h3 className="mb-2 font-display text-lg font-semibold leading-snug text-cream md:text-[20px]">
+            {item.title}
+          </h3>
+          <div className="mb-3 flex flex-wrap gap-2">
+            {item.tags.slice(0, 2).map((t) => (
+              <Tag key={t} label={t} />
+            ))}
           </div>
-          <div className="h-1.5 overflow-hidden rounded-full bg-white/15">
+          <div className="mb-3 h-1.5 max-w-md overflow-hidden rounded-full bg-white/15">
             <div
               className="h-full rounded-full bg-gradient-to-r from-[#065BBC] to-[#A600FF]"
               style={{ width: `${progress}%` }}
             />
           </div>
+          <span className="inline-flex items-center justify-center rounded-lg bg-[#300CFF] px-4 py-2.5 text-sm font-medium text-white">
+            Kontynuuj od modułu {ctaModule}
+          </span>
         </div>
-        <div className="mt-auto flex items-center gap-2 pt-2 text-sm text-navy-soft">
-          <img
-            src={avatarUrl(item.authorName)}
-            alt=""
-            className="h-7 w-7 rounded-full object-cover"
-          />
-          {item.authorName}
+      </div>
+      <div className="hidden w-[140px] shrink-0 flex-col items-end justify-center gap-3 border-l border-white/10 p-4 text-right sm:flex">
+        <div>
+          <p className="text-lg font-semibold text-cream">
+            {modulesDone}/{modulesTotal}
+          </p>
+          <p className="text-xs text-navy-soft">modułów</p>
         </div>
-        <span className="mt-1 flex w-full items-center justify-center rounded-md border-[1.5px] border-soft/80 py-2.5 text-sm font-medium text-soft">
-          Kontynuuj →
-        </span>
+        <div>
+          <p className="text-lg font-semibold text-cream">{minutesLeft} min</p>
+          <p className="text-xs text-navy-soft">do ukończenia</p>
+        </div>
       </div>
     </Link>
+  )
+}
+
+/** @deprecated alias */
+export function CourseCard(props: { item: ContentItem; progress?: number }) {
+  const modulesTotal = 12
+  const modulesDone = Math.round(((props.progress ?? 66) / 100) * modulesTotal)
+  return (
+    <ContinueLearningCard
+      item={props.item}
+      modulesDone={modulesDone}
+      modulesTotal={modulesTotal}
+      compact
+    />
   )
 }
 
