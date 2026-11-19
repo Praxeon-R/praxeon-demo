@@ -22,6 +22,17 @@ const PHOTOS = {
   climb: photo('photo-1522163182402-834f871fd851'),
 }
 
+/** AI-generated mock clips in public/videos (respect Vite base for GH Pages) */
+function clip(file: string) {
+  return `${import.meta.env.BASE_URL}videos/${file}`
+}
+
+const VIDEOS = {
+  basketball: clip('demo-basketball.mp4'),
+  dance: clip('demo-dance.mp4'),
+  fitness: clip('demo-fitness.mp4'),
+}
+
 export const DEMO_PASSWORDS = {
   student: 'DemoStudent12',
   master: 'DemoMaster12',
@@ -80,6 +91,7 @@ export const SEED_CONTENT: ContentItem[] = [
     views: 1240,
     duration: '12:40',
     thumbnail: PHOTOS.basketball,
+    videoUrl: VIDEOS.basketball,
     description: 'Technika rzutu za 3 punkty krok po kroku.',
     tags: ['Basketball', 'Podstawy'],
   },
@@ -94,6 +106,7 @@ export const SEED_CONTENT: ContentItem[] = [
     views: 890,
     duration: '08:15',
     thumbnail: PHOTOS.fitness,
+    videoUrl: VIDEOS.fitness,
     description: 'Jak poprawnie wykonywać mountain climbers.',
     tags: ['Fitness'],
   },
@@ -108,6 +121,7 @@ export const SEED_CONTENT: ContentItem[] = [
     views: 2100,
     duration: '05:00',
     thumbnail: PHOTOS.challenge,
+    videoUrl: VIDEOS.basketball,
     description: 'Rzuć wyzwanie — 50 celnych rzutów w 5 minut.',
     tags: ['Basketball', 'Challenge'],
   },
@@ -122,6 +136,7 @@ export const SEED_CONTENT: ContentItem[] = [
     views: 430,
     duration: '01:20',
     thumbnail: PHOTOS.freestyle,
+    videoUrl: VIDEOS.dance,
     description: 'Próba pobicia rekordu freestyle.',
     tags: ['Freestyle'],
   },
@@ -136,6 +151,7 @@ export const SEED_CONTENT: ContentItem[] = [
     views: 670,
     duration: '15:30',
     thumbnail: PHOTOS.dance,
+    videoUrl: VIDEOS.dance,
     description: 'Ćwiczenie partnerskie dla dwóch osób.',
     tags: ['Kooperacja', 'Dance'],
   },
@@ -150,6 +166,7 @@ export const SEED_CONTENT: ContentItem[] = [
     views: 520,
     duration: '03:45',
     thumbnail: PHOTOS.dance2,
+    videoUrl: VIDEOS.dance,
     description: 'Improwizacja taneczna na beat.',
     tags: ['Dance', 'Freestyle'],
   },
@@ -164,6 +181,7 @@ export const SEED_CONTENT: ContentItem[] = [
     views: 980,
     duration: '18:00',
     thumbnail: PHOTOS.defense,
+    videoUrl: VIDEOS.basketball,
     description: 'Fundamenty obrony indywidualnej.',
     tags: ['Basketball'],
   },
@@ -178,6 +196,7 @@ export const SEED_CONTENT: ContentItem[] = [
     views: 310,
     duration: '03:10',
     thumbnail: PHOTOS.plank,
+    videoUrl: VIDEOS.fitness,
     description: 'Wyzwanie wytrzymałościowe.',
     tags: ['Fitness', 'Challenge'],
   },
@@ -192,6 +211,7 @@ export const SEED_CONTENT: ContentItem[] = [
     views: 1560,
     duration: '14:20',
     thumbnail: PHOTOS.skate,
+    videoUrl: VIDEOS.fitness,
     description: 'Pierwszy trick — ollie krok po kroku.',
     tags: ['Sport', 'Beginner'],
   },
@@ -206,6 +226,7 @@ export const SEED_CONTENT: ContentItem[] = [
     views: 740,
     duration: '09:50',
     thumbnail: PHOTOS.climb,
+    videoUrl: VIDEOS.fitness,
     description: 'Precyzja stóp na ściance.',
     tags: ['Climbing'],
   },
@@ -222,7 +243,7 @@ export const SEED_RANKINGS: RankingEntry[] = [
   { id: 'r8', name: 'Jan Coach', role: 'master', score: 8010, sport: 'Fitness', avatarColor: COLORS[0] },
 ]
 
-const SEED_VERSION = 3
+const SEED_VERSION = 4
 
 export async function ensureSeed(): Promise<void> {
   const version = loadJson<number>('seed_version', 0)

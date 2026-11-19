@@ -39,6 +39,7 @@ export interface ContentItem {
   views: number
   duration: string
   thumbnail: string
+  videoUrl: string
   description: string
   tags: string[]
 }
