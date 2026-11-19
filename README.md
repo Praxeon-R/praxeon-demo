@@ -16,6 +16,21 @@ npm install
 npm run dev
 ```
 
+## Hosting (GitHub Pages)
+
+Deploy idzie automatycznie z `main` przez Actions (`.github/workflows/deploy-pages.yml`).
+
+URL: https://praxeon-r.github.io/praxeon-demo/
+
+Jednorazowo w repo: **Settings → Pages → Source: GitHub Actions**.
+
+Lokalny build jak na Pages:
+
+```bash
+GITHUB_PAGES=true npm run build
+npm run preview
+```
+
 ## Konta demo
 
 | Rola   | E-mail           | Hasło          |

@@ -32,8 +32,10 @@ export default function App() {
     )
   }
 
+  const basename = import.meta.env.BASE_URL.replace(/\/$/, '')
+
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={basename}>
       <Routes>
         <Route element={<RequireGuest />}>
           <Route path="/login" element={<LoginPage />} />
