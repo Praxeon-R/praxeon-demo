@@ -160,7 +160,7 @@ export function VideoCard({
 
       <Link
         to={`/content/${item.id}`}
-        className="flex w-full items-center justify-center gap-2 rounded-md border-[1.5px] border-primary bg-white py-3.5 text-base font-medium text-primary transition hover:opacity-85"
+        className="flex w-full items-center justify-center gap-2 rounded-md border-[1.5px] border-[#300CFF] bg-white py-3.5 text-base font-medium text-[#300CFF] transition hover:opacity-85"
       >
         Kontynuuj →
       </Link>
@@ -280,7 +280,7 @@ export function SectionRail({
         <h2 className="font-display text-[28px] font-semibold tracking-tight">{title}</h2>
         <button
           type="button"
-          className="rounded-md border-[1.5px] border-soft/80 px-5 py-2.5 text-sm font-medium text-soft hover:bg-soft/10"
+          className="rounded-md border-[1.5px] border-[#D6CEFF] px-5 py-2.5 text-sm font-medium text-[#D6CEFF] hover:bg-white/5"
         >
           {actionLabel}
         </button>

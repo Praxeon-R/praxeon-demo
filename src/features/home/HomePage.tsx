@@ -90,7 +90,7 @@ export function HomePage() {
           <h2 className="font-display text-[28px] font-semibold">Kontynuuj naukę</h2>
           <button
             type="button"
-            className="rounded-md border-[1.5px] border-soft/80 px-5 py-2.5 text-sm font-medium text-soft hover:bg-soft/10"
+            className="rounded-md border-[1.5px] border-[#D6CEFF] px-5 py-2.5 text-sm font-medium text-[#D6CEFF] hover:bg-white/5"
           >
             Zobacz wszystkie
           </button>
